@@ -13,7 +13,7 @@ chrome_options.add_argument(Config.USER_AGENT)
 chrome_options.add_argument("start-maximized")
 chrome_options.add_argument("disable-infobars")
 chrome_options.add_argument("--disable-extensions")
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 
 LOGIN_URL = "https://www.appbrain.com/login"
 
@@ -54,6 +54,7 @@ def login(email, password):
 
         driver.find_element_by_xpath(Gmail.PASSWORD_NEXT).click()
         
+        # Waiting Till AppBrain Home Page Loads
         WebDriverWait(driver, 25).until(
         EC.url_contains(AppBrainLogin.URL_CONTAINS))
 
@@ -61,7 +62,7 @@ def login(email, password):
         EC.presence_of_element_located((By.XPATH, AppBrainLogin.USER_ICON))
         )
         
-        print(driver.title)
+        return driver
 
     except exceptions.TimeoutException as e:
         raise e("Timeout Exceeded Check your Internet Connection")
@@ -70,13 +71,4 @@ def login(email, password):
     except exceptions.ElementNotInteractableException as e:
         raise e("Element is present in the DOM but interactions with that element will hit another element do to paint order")
     
-    finally:
-        driver.quit()
-
-
-if __name__ == '__main__':
-
-    email = ""
-    password = ""
-    # login(email, password)
 

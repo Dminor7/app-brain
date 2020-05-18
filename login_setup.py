@@ -12,7 +12,7 @@ class Gmail:
 
 class Config:
     USER_AGENT = "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36"
-    CHROMEDRIVER = os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)),"chromedriver")
+    CHROMEDRIVER = os.path.join(os.getcwd(),"chromedriver")
 
 
 class AppBrainLogin:
