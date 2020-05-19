@@ -3,9 +3,10 @@ import pandas as pd
 from pprint import pprint
 import re
 import demjson
-from datetime import datetime
+from utils import Apps
 
-class Detail:
+class DetailPage:
+
     def __init__(self, app, page_source):        
         self.df_change_log = pd.DataFrame()
         self.df_rating_history = pd.DataFrame()
@@ -16,11 +17,11 @@ class Detail:
         l_date = []
         l_status = []
         l_description = []
-        for ultag in self._soup.find_all('ul',class_='app-changelog'):
+        for ultag in self._soup.find_all('ul',class_=Apps.CL_UL_TAG):
             for litag in ultag.find_all('li'):
-                date        = litag.find('span',class_='app-changelog-date').text.strip() or None
-                status      = litag.find('span',class_='app-changelog-type').text.strip() or None
-                description = litag.find('span',class_='app-changelog-description').text.strip() or None
+                date        = litag.find('span',class_=Apps.CL_DATE).text.strip() or None
+                status      = litag.find('span',class_=Apps.CL_DATE).text.strip() or None
+                description = litag.find('span',class_=Apps.CL_DESCRIPTION).text.strip() or None
                 
                 l_date.append(date)
                 l_status.append(status)
@@ -35,7 +36,7 @@ class Detail:
 
     def infotile(self):
         info = dict()
-        main_content = self._soup.select("div#main_content > div.infotiles")
+        main_content = self._soup.select(Apps.IT_MAIN_CONTENT)
         for infotiles in main_content:
             data = infotiles.find_all(['div','a'],{'tooltip':True})
             for element in data:
@@ -45,10 +46,10 @@ class Detail:
 
     def rating_history(self):
         rate = {}
-        ratings = self._soup.select('#ratinghistory > div.table-div')
+        ratings = self._soup.select(Apps.RH_RATINGS)
         for rating in ratings:
-            votes = rating.find_all("div",class_="app-ratings-cell-votes")
-            stars = rating.find_all("div",class_="app-ratings-cell-stars")
+            votes = rating.find_all("div",class_=Apps.RH_VOTES)
+            stars = rating.find_all("div",class_=Apps.RH_STARS)
             
             for vote,star in zip(votes,stars):
                 yellow = 0
@@ -60,9 +61,7 @@ class Detail:
         return rate
     
     def rating_histogram(self):
-        # pattern = re.compile("\s+var+\s+ratingHistoryData\s+=\s+(.*?);")
-        quote_keys_regex = r'([\{\s,])(\w+)(:)'
-        pattern = re.compile('var ratingHistoryData = (.*?);')
+        pattern = re.compile(Apps.RH_RATING_DATA)
         scripts = self._soup.find_all('script')
         for script in scripts:
             if(pattern.search(str(script.string))):
@@ -91,7 +90,7 @@ class Detail:
 
         return {"rating_history_date":date,"rating_moving_avg":rating_moving_avg,"rating_status":status}   
     
-    def __call__(self):
+    def scrape(self):
         change_log = self.changelog()
         info_title = self.infotile()
         ratings = self.rating_history()
@@ -100,12 +99,4 @@ class Detail:
         self.df_change_log = self.df_change_log.from_dict({**self._app,**change_log,**info_title, **ratings})
         self.df_rating_history = self.df_rating_history.from_dict({**self._app,**histogram})
 
-
-if __name__ == "__main__":
-    d = Detail("com.virtualapps.statuswall",open("detail_source.html",'r').read())
-    d()
-    # pprint(d.df.head(1))
-    d.df_change_log.to_csv("VirtualApps2019.csv",index=False)
-    d.df_rating_history.to_csv("VirtualApps2019_rating_history.csv",index=False)
-
-    # data = re.search("\s+var\s+ratingHistoryData\s+=\s+(.*?);",str(soup),re.IGNORECASE).group(1)
+        return self

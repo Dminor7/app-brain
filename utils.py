@@ -18,3 +18,24 @@ class Config:
 class AppBrainLogin:
     USER_ICON = "//*[@id='userIcon']"
     URL_CONTAINS = "appbrain"
+
+
+class Apps:
+    FILE_EXTENSION = ".csv"
+    TABLE = "app_table_gwt"
+    SHOW_MORE = "//*[@id='app_table_gwt']/table/tbody/tr[2]/td/table/tbody/tr/td/a"
+    CL_UL_TAG = "app-changelog"
+    CL_DATE = "app-changelog-date"
+    CL_STATUS = "app-changelog-type"
+    CL_DESCRIPTION = "app-changelog-description"
+    IT_MAIN_CONTENT = "div#main_content > div.infotiles"
+    RH_RATINGS = "#ratinghistory > div.table-div"
+    RH_VOTES = "app-ratings-cell-votes"
+    RH_STARS = "app-ratings-cell-stars"
+    RH_RATING_DATA = "var ratingHistoryData = (.*?);"
+    
+
+
+class Path:
+    INPUT = os.path.join(os.getcwd(),"input")
+    OUPUT = os.path.join(os.getcwd(),"ouput")
