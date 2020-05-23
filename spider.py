@@ -14,7 +14,11 @@ from datetime import datetime
 import os
 import codecs
 import pandas as pd
+from log import get_logger
 
+os.makedirs("logs", exist_ok=True)
+log_file = os.path.join(os.getcwd(),logs,datetime.now.strftime("%Y_%m%d")
+logger = get_logger("Spider", log_file)
 
 class Spider:
 
@@ -89,6 +93,7 @@ class Spider:
                     EC.visibility_of_element_located((By.ID,Apps.TABLE))
                     )
                 except exceptions.TimeoutException as e:
+                    logger.exception(f"crawl-No app table {e}")
                     pass
 
                 
@@ -120,6 +125,7 @@ class Spider:
                             EC.presence_of_element_located((By.CSS_SELECTOR,Apps.IT_MAIN_CONTENT))
                             )
                         except exceptions.TimeoutException as e:
+                            logget.exception(f'Timeout No main content {e}')
                             pass
                         
                         if(main_content):
@@ -131,6 +137,7 @@ class Spider:
                             try:
                                 apps_dataframes.append(DetailPage(app_name,page_source).scrape())
                             except Exception as e:
+                                logger.exception(f'DetailPage.scrape() {e}')
                                 pass
                         sleep(uniform(2.5,6.3))
                     self._make_csv(apps_dataframes, filename)
@@ -138,6 +145,7 @@ class Spider:
                 gui_queue.put(message)    
             gui_queue.put("\t-----Completed-----\t")
         except Exception as e:
+            logger.exception(f'Error occured {e}')
             raise e("Error getting the requested page")
         finally:
             driver.quit()

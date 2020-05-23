@@ -7,6 +7,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common import exceptions 
 from utils import Gmail,Config,AppBrainLogin
 
+os.makedirs("logs", exist_ok=True)
+log_file = os.path.join(os.getcwd(),logs,datetime.now.strftime("%Y_%m%d")
+logger = get_logger("Spider", log_file)
 
 class Login:
 
@@ -26,6 +29,7 @@ class Login:
         try:
             driver.get(self.login_url)
         except Exception as e:
+            logger.error(f"Error fetching url {self.login}")
             raise e(f"Error fetching URL : {self.login}")
         
         try:
@@ -66,8 +70,11 @@ class Login:
             return driver
 
         except exceptions.TimeoutException as e:
+            logger.exception(e)
             raise e("Timeout Exceeded Check your Internet Connection")
         except  exceptions.NoSuchElementException as e:
+            logger.exception(e)
             raise e("Element is not found in the DOM")
         except exceptions.ElementNotInteractableException as e:
+            logger.exception(e)
             raise e("Element is present in the DOM but interactions with that element will hit another element do to paint order")
