@@ -21,6 +21,7 @@ class AppBrainLogin:
 
 
 class Apps:
+    DETAIL_LINKS = "dev-page-table-app-link"
     FILE_EXTENSION = ".csv"
     TABLE = "app_table_gwt"
     SHOW_MORE = "//*[@id='app_table_gwt']/table/tbody/tr[2]/td/table/tbody/tr/td/a"

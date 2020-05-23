@@ -56,7 +56,7 @@ class Login:
             driver.find_element_by_xpath(Gmail.PASSWORD_NEXT).click()
             
             # Waiting Till AppBrain Home Page Loads
-            WebDriverWait(driver, 25).until(
+            WebDriverWait(driver, 50).until(
             EC.url_contains(AppBrainLogin.URL_CONTAINS))
 
             WebDriverWait(driver, 10).until(
