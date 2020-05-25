@@ -17,7 +17,7 @@ import pandas as pd
 from log import get_logger
 
 os.makedirs("logs", exist_ok=True)
-log_file = os.path.join(os.getcwd(),logs,datetime.now.strftime("%Y_%m%d")
+log_file = os.path.join(os.getcwd(),"logs",datetime.now().strftime("%Y_%m%d"))
 logger = get_logger("Spider", log_file)
 
 class Spider:
@@ -84,7 +84,8 @@ class Spider:
         try:
             # Iterating over developer account urls
             for url in url_list:
-                print(url)
+                message = f"Fetching: {url}"
+                gui_queue.put(message)
                 driver.get(url)
 
                 try:
@@ -118,20 +119,30 @@ class Spider:
                     # Itrating over detail app pages for developer
                     for link in detail_links:
                         driver.get(link)
-
+                        
+                        try:
+                            if("mature-warning" in driver.current_url):
+                                yes_button = driver.find_element_by_xpath(Apps.MATURE_WARNING)
+                                if(yes_button):
+                                    yes_button.click()
+                        except exceptions.NoSuchElementException as e:
+                            pass
+                        
                         try:
                             # Wait Until Table Loads
-                            main_content = WebDriverWait(driver, 10).until(
+                            main_content = WebDriverWait(driver, 20).until(
                             EC.presence_of_element_located((By.CSS_SELECTOR,Apps.IT_MAIN_CONTENT))
                             )
                         except exceptions.TimeoutException as e:
-                            logget.exception(f'Timeout No main content {e}')
+                            logger.exception(f'Timeout No main content {e}')
                             pass
                         
                         if(main_content):
                             app_url = driver.current_url
                             app_name = app_url.split("/")[-1]
                             page_source = driver.page_source
+                            message = f"Fetching: {app_name}"
+                            gui_queue.put(message)
                             # with codecs.open(app_name.split(".")[-1]+".html",'w',"utf-8") as f:
                             #     f.write(page_source)
                             try:

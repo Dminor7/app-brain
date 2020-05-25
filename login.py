@@ -6,10 +6,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options 
 from selenium.common import exceptions 
 from utils import Gmail,Config,AppBrainLogin
+import os
+import log
+from datetime import datetime
 
 os.makedirs("logs", exist_ok=True)
-log_file = os.path.join(os.getcwd(),logs,datetime.now.strftime("%Y_%m%d")
-logger = get_logger("Spider", log_file)
+log_file = os.path.join(os.getcwd(),"logs", datetime.now().strftime("%Y_%m%d"))
+logger = log.get_logger("Spider", log_file)
 
 class Login:
 

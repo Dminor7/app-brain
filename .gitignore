@@ -5,6 +5,10 @@
 *.csv
 Html
 input
+*.zip
+logs
+output
+app.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

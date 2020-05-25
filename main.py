@@ -4,14 +4,15 @@ import time
 import PySimpleGUI as sg
 from random import uniform
 import pandas as pd
-
+import os
 from spider import Spider
 
 class Gui:
 
     def __init__(self):
         sg.theme("DarkBlue3")
-        sg.SetOptions(font='opensans 11', icon = 'crawl.ico')
+        icon = os.path.join(os.getcwd(),"crawl.ico")
+        sg.SetOptions(font='opensans 11', icon = icon)
         self.layout =  [
                         [sg.Text("App Brain Crawler", font='sfprodisplay 25 bold')],
                         [sg.Text("Gmail Id",pad=((10,65),(10,10))), sg.InputText(key='_EMAIL_')],

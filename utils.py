@@ -34,7 +34,7 @@ class Apps:
     RH_VOTES = "app-ratings-cell-votes"
     RH_STARS = "app-ratings-cell-stars"
     RH_RATING_DATA = "var ratingHistoryData = (.*?);"
-    
+    MATURE_WARNING = "/html/body/div/div[2]/div[1]/a[2]"
 
 
 class Path:
